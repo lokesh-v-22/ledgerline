@@ -40,9 +40,9 @@
 
 # Produced: triggers that block UPDATE and DELETE on the audit, ledger and transaction tables.
 
-# Wrong: (TO COMPLETE) the app database user owned the tables, so it could drop the triggers, and TRUNCATE is not stopped by row triggers.
+# Wrong: the app's database user owned the tables, so it could drop the triggers, and TRUNCATE is not stopped by row triggers. Anyone who took over the app could erase the audit trail. The schema also did not check that each transaction's ledger entries add up to zero.
 
-# Did instead: (TO COMPLETE)
+# Did instead: created a separate owner user (ledgerline\_owner) that only runs migrations, limited the app user to SELECT and INSERT on the audit, ledger and transaction tables, added triggers that block TRUNCATE, and added a deferred check that every transaction's ledger entries sum to zero. Verified: as the app user, DELETE and TRUNCATE on audit\_log give "permission denied" and DROP TRIGGER gives "must be owner".
 
-# Commit: (TO COMPLETE)
+# Commit: https://github.com/lokesh-v-22/ledgerline/commit/daae8df
 
